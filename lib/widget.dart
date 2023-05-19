@@ -11,7 +11,7 @@ class _MyHomePageState extends State<MyHomePage> {
   String _response = '';
 
   Future<void> fetchData() async {
-    final response = await http.get(Uri.parse('https://test-atre-server-v2.up.railway.app/'));
+    final response = await http.get(Uri.parse('http://your-server-url.com'));
     
     if (response.statusCode == 200) {
       // If the request is successful, update the UI with the response body

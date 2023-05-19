@@ -33,7 +33,7 @@ class _ServerStatusScreenState extends State<ServerStatusScreen> {
   Future<void> checkServerStatus() async {
     try {
       final response = await http
-          .get(Uri.parse('https://test-atre-server-v2.up.railway.app/'));
+          .get(Uri.parse('http://your-server-url.com'));
       if (response.statusCode == 200) {
         print(response.body);
         print('Request successful');
