@@ -1,3 +1,4 @@
+import 'package:file/widget.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:async';
@@ -32,7 +33,7 @@ class _ServerStatusScreenState extends State<ServerStatusScreen> {
   Future<void> checkServerStatus() async {
     try {
       final response = await http
-          .get(Uri.parse('http://your-server-url.com'));
+          .get(Uri.parse('https://test-atre-server-v2.up.railway.app/'));
       if (response.statusCode == 200) {
         print(response.body);
         print('Request successful');
@@ -93,9 +94,9 @@ class _ServerStatusScreenState extends State<ServerStatusScreen> {
                 height: 200,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(8),
-                  color: Color.fromARGB(255, 224, 224, 224),
-                  
+                  color: Color.fromARGB(255, 224, 224, 224),    
                 ),
+                child: MyHomePage(),
               )
             ],
           ),
