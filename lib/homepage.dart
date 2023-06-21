@@ -1,7 +1,8 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-
+import 'package:provider/provider.dart';
+import 'api_service.dart';
 import 'model.dart';
 
 class ServerStatusWidget extends StatefulWidget {
@@ -10,28 +11,24 @@ class ServerStatusWidget extends StatefulWidget {
 }
 
 class _ServerStatusWidgetState extends State<ServerStatusWidget> {
-  bool isServerOn = false;
-  var result;
+  bool isServerOn = true;
+  String? status;
+  String? message;
 
-  Future<ServerModel?> dashboardDetails() async {
-    final http.Response response = await http.get(
-      Uri.parse('http://api.atrehealthtech.com:1400/server'),
-      headers: <String, String>{
-        'Content-Type': 'application/json; charset=UTF-8',
-      },
-    );
-
-    if (response.statusCode == 200) {
-      result = json.decode(response.body);
-      print(response.body);
-      return ServerModel.fromJson(result);
-    } else {
-      return ServerModel.fromJson(result);
-    }
+  @override
+  void initState() {
+    final _serverApi = Provider.of<ApiService>(context, listen: false);
+    _serverApi.getServer().then((value) {
+      status = value!.status;
+      message = value.message;
+    });
+    super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
+    final _serverApi = Provider.of<ApiService>(context);
+    print(message);
     return Scaffold(
       appBar: AppBar(
           centerTitle: true,
@@ -40,26 +37,37 @@ class _ServerStatusWidgetState extends State<ServerStatusWidget> {
             "Server Status",
             style: TextStyle(color: Colors.brown),
           )),
-      body: FutureBuilder<ServerModel>(
+      body: FutureBuilder<ServerConnectionModel>(
         //future: Future(() => dashboardDetails()),
         builder: (context, snapshot) => Column(
           children: [
             Padding(
-              padding: const EdgeInsets.all(8.0),
+              padding: const EdgeInsets.all(20.0),
               child: ElevatedButton(
-                onPressed: dashboardDetails,
-                child: Text(snapshot.data.toString()),
-              ),
+                  onPressed: () {
+                    _serverApi.getServer();
+                  },
+                  child: const Text("check")
+                  // Text(snapshot.data.toString()),
+                  ),
             ),
             SizedBox(height: 16.0),
             Column(
               children: [
-                Text(
-                  isServerOn ? 'Server is ON' : 'Server is OFF',
-                  style: TextStyle(fontSize: 20.0),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Text(
+                    isServerOn ? 'Server is ON' : 'Server is OFF',
+                    style: TextStyle(fontSize: 20.0),
+                  ),
                 ),
               ],
             ),
+            Container(
+              height: 100,
+              width: 100,
+              decoration: BoxDecoration(color: Colors.cyan),
+            )
           ],
         ),
       ),

@@ -1,18 +1,28 @@
-class ServerModel {
-  String? status;
-  String? message;
+import 'dart:convert';
 
-  ServerModel({this.status, this.message});
+ServerConnectionModel serverConnectionModelFromJson(String str) =>
+    ServerConnectionModel.fromJson(json.decode(str));
 
-  ServerModel.fromJson(Map<String, dynamic> json) {
-    status = json['status'];
-    message = json['message'];
-  }
+String serverConnectionModelToJson(ServerConnectionModel data) =>
+    json.encode(data.toJson());
 
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['status'] = this.status;
-    data['message'] = this.message;
-    return data;
-  }
+class ServerConnectionModel {
+  String status;
+  String message;
+
+  ServerConnectionModel({
+    required this.status,
+    required this.message,
+  });
+
+  factory ServerConnectionModel.fromJson(Map<String, dynamic> json) =>
+      ServerConnectionModel(
+        status: json["status"],
+        message: json["message"],
+      );
+
+  Map<String, dynamic> toJson() => {
+        "status": status,
+        "message": message,
+      };
 }
